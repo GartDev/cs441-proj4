@@ -17,6 +17,14 @@ public class Simon extends ApplicationAdapter {
 	private Sprite catsprite;
 	private Sprite cowsprite;
 	private Sprite goatsprite;
+	private float dogx = 200;
+	private float catx = 400;
+	private float cowx = 600;
+	private float goatx = 800;
+	private float dogy = 200;
+	private float caty = 200;
+	private float cowy = 200;
+	private float goaty = 200;
 
 	
 	@Override
@@ -39,10 +47,15 @@ public class Simon extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		dogsprite.draw(batch);
+		dogsprite.setPosition(dogx,dogy);
 		catsprite.draw(batch);
+		catsprite.setPosition(catx,caty);
 		cowsprite.draw(batch);
+		cowsprite.setPosition(cowx,cowy);
 		goatsprite.draw(batch);
+		goatsprite.setPosition(goatx,goaty);
 		batch.end();
+		update();
 	}
 	
 	@Override
@@ -52,5 +65,14 @@ public class Simon extends ApplicationAdapter {
 		cattex.dispose();
 		cowtex.dispose();
 		goattex.dispose();
+	}
+
+	public void update(){
+		dogx++;
+		dogy++;
+		caty++;
+		cowx++;
+		goatx--;
+		goaty++;
 	}
 }
