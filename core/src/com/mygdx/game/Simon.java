@@ -3,11 +3,25 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+
+import java.awt.Point;
+
 
 public class Simon extends ApplicationAdapter {
+
+	int length = Gdx.graphics.getWidth();
+	int height = Gdx.graphics.getHeight();
+	World world = new World(new Vector2(0,-10),true);
+	Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
+	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture dogtex;
 	private Texture cattex;
@@ -29,6 +43,9 @@ public class Simon extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
+		Box2D.init();
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
 		dogtex = new Texture("dog.bmp");
 		cattex = new Texture("cat.bmp");
@@ -55,7 +72,8 @@ public class Simon extends ApplicationAdapter {
 		goatsprite.draw(batch);
 		goatsprite.setPosition(goatx,goaty);
 		batch.end();
-		update();
+		world.step(1/60f, 6, 2);
+		debugRenderer.render(world, camera.combined);
 	}
 	
 	@Override
@@ -67,12 +85,12 @@ public class Simon extends ApplicationAdapter {
 		goattex.dispose();
 	}
 
-	public void update(){
+	/*public void update(){
 		dogx++;
 		dogy++;
 		caty++;
 		cowx++;
 		goatx--;
 		goaty++;
-	}
+	}*/
 }
