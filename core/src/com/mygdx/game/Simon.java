@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -36,6 +37,8 @@ public class Simon extends ApplicationAdapter {
 	private int score;
 	private int round;
 	private int[] gameplay;
+	CharSequence str;
+	BitmapFont font;
 	@Override
 	public void create () {
 		dogtex = new Texture(Gdx.files.internal("dog.bmp"));
@@ -82,6 +85,8 @@ public class Simon extends ApplicationAdapter {
 		gameplay[7] = 4;
 		gameplay[8] = 1;
 		gameplay[9] = 2;
+		str = "Listen...";
+		font = new BitmapFont();
 
 	}
 
@@ -97,22 +102,77 @@ public class Simon extends ApplicationAdapter {
 		batch.draw(cowtex,cowhit.x,cowhit.y);
 		batch.draw(goattex,goathit.x,goathit.y);
 		batch.end();
-		if(Gdx.input.isTouched()) {
-			Vector3 touchPos = new Vector3();
-			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-			camera.unproject(touchPos);
-			if(touchPos.x >= 0 && touchPos.x < 200 ){
+		batch.begin();
+		font.draw(batch,str,400,300);
+		batch.end();
+		for(int i = 0; i<=round; i++){
+			int soundchoice = gameplay[i];
+			if(soundchoice == 1){
 				woof.play();
-			}else if(touchPos.x >= 200 && touchPos.x <= 400 ){
+			}else if(soundchoice == 2){
 				meow.play();
-			}else if(touchPos.x >= 400 && touchPos.x <= 600 ){
+			}else if(soundchoice == 3){
 				moo.play();
-			}else if(touchPos.x >= 600 && touchPos.x <= 800 ){
+			}else {
 				baa.play();
-			}else{
-
 			}
 		}
+		for(int i = 0; i<=round; i++) {
+			int correct = gameplay[i];
+			if (Gdx.input.isTouched()) {
+				Vector3 touchPos = new Vector3();
+				touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+				camera.unproject(touchPos);
+				if (touchPos.x >= 0 && touchPos.x < 200) {
+					woof.play();
+					if(correct == 1){
+						score++;
+						round++;
+					}else{
+						score = 0;
+						round = 0;
+						str = "Incorrect!";
+					}
+				} else if (touchPos.x >= 200 && touchPos.x <= 400) {
+					meow.play();
+					if(correct == 2){
+						score++;
+						round++;
+					}else{
+						score = 0;
+						round = 0;
+						str = "Incorrect!";
+					}
+				} else if (touchPos.x >= 400 && touchPos.x <= 600) {
+					moo.play();
+					if(correct == 3){
+						score++;
+						round++;
+					}else{
+						score = 0;
+						round = 0;
+						str = "Incorrect!";
+					}
+				} else if (touchPos.x >= 600 && touchPos.x <= 800) {
+					baa.play();
+					if(correct == 4){
+						score++;
+						round++;
+					}else{
+						score = 0;
+						round = 0;
+						str = "Incorrect!";
+					}
+				} else {
+
+				}
+			}else{
+				continue;
+			}
+		}
+		//batch.begin();
+		//font.draw(batch, String.valueOf(score), 400,300);
+		//batch.end();
 	}
 
 	@Override
